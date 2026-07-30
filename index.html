@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Starmieverse S4 Stat Calculator</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" type="image/x-icon" href="favicon.ico?v=2">
+</head>
+<body>
+
+  <h1 class="typing-header">
+    <span class="line line-1">Starmieverse S4 Stat Calculator</span>
+    <span class="line line-2">🌸 Built by SylvieonMtf 🌸</span>
+  </h1>
+
+  <div class="controls">
+    <div class="control-group">
+      <label for="base-input">Base Pokémon (60%)</label>
+      <div class="custom-select-wrapper">
+        <input type="text" id="base-input" class="custom-select-input" placeholder="Search Base Pokémon..." autocomplete="off">
+        <div id="base-dropdown" class="dropdown-list"></div>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label for="attr-input">Attribution Pokémon (40%)</label>
+      <div class="custom-select-wrapper">
+        <input type="text" id="attr-input" class="custom-select-input" placeholder="Search Attribution Pokémon..." autocomplete="off">
+        <div id="attr-dropdown" class="dropdown-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="results-container">
+    <div class="pokemon-card" id="base-card"></div>
+    
+    <div class="pokemon-card" id="attr-card"></div>
+
+    <div class="pokemon-card fusion" id="fusion-card"></div>
+  </div>
+
+  <div class="footer">
+    Icon from <a href="https://sprites.pmdcollab.org/#/" target="_blank" rel="noopener">PMD Collab</a>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
