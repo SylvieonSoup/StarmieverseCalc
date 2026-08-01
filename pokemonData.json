@@ -21251,7 +21251,7 @@
   },
   {
     "id": 128,
-    "name": "Tauros-Paldea-Aqua",
+    "name": "Tauros-Paldea-Blaze",
     "types": [
       "Fighting",
       "Fire"
@@ -21324,7 +21324,7 @@
   },
   {
     "id": 128,
-    "name": "Tauros-Paldea-Blaze",
+    "name": "Tauros-Paldea-Combat",
     "types": [
       "Fighting"
     ],
@@ -21401,7 +21401,7 @@
   },
   {
     "id": 128,
-    "name": "Tauros-Paldea-Combat",
+    "name": "Tauros-Paldea-Aqua",
     "types": [
       "Fighting",
       "Water"
@@ -69732,7 +69732,7 @@
   },
   {
     "id": 479,
-    "name": "Rotom-Fan",
+    "name": "Rotom-Heat",
     "types": [
       "Electric",
       "Fire"
@@ -69821,7 +69821,7 @@
   },
   {
     "id": 479,
-    "name": "Rotom-Frost",
+    "name": "Rotom-Wash",
     "types": [
       "Electric",
       "Water"
@@ -69910,7 +69910,7 @@
   },
   {
     "id": 479,
-    "name": "Rotom-Heat",
+    "name": "Rotom-Frost",
     "types": [
       "Electric",
       "Ice"
@@ -69999,7 +69999,7 @@
   },
   {
     "id": 479,
-    "name": "Rotom-Mow",
+    "name": "Rotom-Fan",
     "types": [
       "Electric",
       "Flying"
@@ -70088,7 +70088,7 @@
   },
   {
     "id": 479,
-    "name": "Rotom-Wash",
+    "name": "Rotom-Mow",
     "types": [
       "Electric",
       "Grass"
@@ -134512,7 +134512,7 @@
   },
   {
     "id": 1017,
-    "name": "Ogerpon-Cornerstone",
+    "name": "Ogerpon-Wellspring",
     "types": [
       "Grass",
       "Water"
@@ -134678,7 +134678,7 @@
   },
   {
     "id": 1017,
-    "name": "Ogerpon-Wellspring",
+    "name": "Ogerpon-Cornerstone",
     "types": [
       "Grass",
       "Rock"
