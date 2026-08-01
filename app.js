@@ -4,6 +4,37 @@ let allPokemon = [];
 let selectedBase = null;
 let selectedAttr = null;
 
+const moveCategoryCache = {};
+
+function formatMoveNameForApi(moveName) {
+  return moveName
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+}
+
+async function fetchMoveCategory(moveName) {
+  const apiSlug = formatMoveNameForApi(moveName);
+
+  if (moveCategoryCache[apiSlug]) {
+    return moveCategoryCache[apiSlug];
+  }
+
+  try {
+    const res = await fetch(`https://pokeapi.co/api/v2/move/${apiSlug}`);
+    if (!res.ok) throw new Error('Move not found');
+    
+    const data = await res.json();
+    const damageClass = data.damage_class ? data.damage_class.name : 'unknown';
+    
+    moveCategoryCache[apiSlug] = damageClass;
+    return damageClass;
+  } catch (err) {
+    moveCategoryCache[apiSlug] = 'unknown';
+    return 'unknown';
+  }
+}
+
 async function init() {
   try {
     const res = await fetch('pokemonData.json');
@@ -159,7 +190,7 @@ function getTypeCombinations(baseTypes, attrTypes) {
   return combos;
 }
 
-function update() {
+async function update() {
   if (!selectedBase || !selectedAttr) return;
 
   const fusionStats = selectedBase.stats.map((stat, i) => 
@@ -174,10 +205,31 @@ function update() {
   renderCard('attr-card', selectedAttr.name + " (Attribution)", selectedAttr.id, [selectedAttr.types], selectedAttr.stats);
   
   const fusionName = `Get Starmied LMAO!`;
-  renderCard('fusion-card', fusionName, selectedBase.id, typeCombos, fusionStats, combinedAbilities, combinedMoves);
+
+  renderCard('fusion-card', fusionName, selectedBase.id, typeCombos, fusionStats, combinedAbilities, null, true);
+
+  const moveCategories = {
+    physical: [],
+    special: [],
+    status: [],
+    unknown: []
+  };
+
+  await Promise.all(
+    combinedMoves.map(async (move) => {
+      const category = await fetchMoveCategory(move);
+      if (moveCategories[category]) {
+        moveCategories[category].push(move);
+      } else {
+        moveCategories.unknown.push(move);
+      }
+    })
+  );
+
+  renderCard('fusion-card', fusionName, selectedBase.id, typeCombos, fusionStats, combinedAbilities, moveCategories, false);
 }
 
-function renderCard(elementId, title, id, typeCombinations, stats, abilities = null, moves = null) {
+function renderCard(elementId, title, id, typeCombinations, stats, abilities = null, movesData = null, isLoadingMoves = false) {
   const card = document.getElementById(elementId);
   const spriteUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
 
@@ -200,7 +252,35 @@ function renderCard(elementId, title, id, typeCombinations, stats, abilities = n
   }).join('');
 
   let extraHTML = '';
-  if (abilities && moves) {
+  if (abilities) {
+    let movesHTML = '';
+
+    if (isLoadingMoves) {
+      movesHTML = `<div class="loading-text" style="color: #888; font-style: italic;">Categorizing moves via PokéAPI...</div>`;
+    } else if (movesData) {
+      movesHTML = `
+        <div class="moves-container">
+          <div class="move-category physical">
+            <strong>Physical (${movesData.physical.length}):</strong>
+            <span>${movesData.physical.join(', ') || 'None'}</span>
+          </div>
+          <div class="move-category special">
+            <strong>Special (${movesData.special.length}):</strong>
+            <span>${movesData.special.join(', ') || 'None'}</span>
+          </div>
+          <div class="move-category status">
+            <strong>Status (${movesData.status.length}):</strong>
+            <span>${movesData.status.join(', ') || 'None'}</span>
+          </div>
+          ${movesData.unknown.length > 0 ? `
+            <div class="move-category unknown">
+              <strong>Unclassified (${movesData.unknown.length}):</strong>
+              <span>${movesData.unknown.join(', ')}</span>
+            </div>` : ''}
+        </div>
+      `;
+    }
+
     extraHTML = `
       <div class="fusion-extra-info">
         <div class="info-section">
@@ -208,8 +288,8 @@ function renderCard(elementId, title, id, typeCombinations, stats, abilities = n
           <div>${abilities.join(', ')}</div>
         </div>
         <div class="info-section">
-          <h4>Combined Movepool (${moves.length} moves):</h4>
-          <div class="moves-container">${moves.join(', ')}</div>
+          <h4>Combined Movepool:</h4>
+          ${movesHTML}
         </div>
       </div>
     `;
